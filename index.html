@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMAPar | Industrial Maintenance & Automation Partner</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #002648;
+            --accent: #F2A209;
+            --dark: #070a0d;
+            --light-text: #cbd5e1;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--dark); color: white; line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(7, 10, 13, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav img { height: 60px; transition: transform 0.3s; }
+        nav img:hover { transform: scale(1.05); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* --- LANGUAGE TOGGLE --- */
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 6px 14px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .lang-btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Visibility classes for JS toggle */
+        .lang-fr { display: none !important; }
+        .lang-en { display: inline-block !important; }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 8%;
+            position: relative;
+            background: linear-gradient(to right, rgba(7, 10, 13, 0.9), rgba(0, 38, 72, 0.4)), url('background.png') center/cover no-repeat;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            border-left: 4px solid var(--accent);
+            padding-left: 30px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            margin-bottom: 10px;
+            color: #fff;
+            line-height: 1.1;
+        }
+
+        .hero span { color: var(--accent); }
+
+        .hero p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 550px;
+            margin-top: 20px;
+            font-weight: 300;
+        }
+
+        /* --- EXPERTISE SECTION --- */
+        #services { padding: 120px 8%; background: var(--dark); }
+
+        .section-title { margin-bottom: 60px; }
+        .section-title h2 { font-size: 2.5rem; }
+        .bar { width: 60px; height: 4px; background: var(--accent); margin-top: 15px; }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            align-items: stretch;
+        }
+
+        .service-card {
+            background: linear-gradient(145deg, #0a1622, var(--primary));
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            padding: 0; 
+            overflow: hidden; 
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Header Image area with Zoom Effect */
+        .card-icon {
+            width: 100%;
+            height: 200px;
+            border-bottom: 2px solid var(--accent);
+            overflow: hidden;
+        }
+
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .service-card:hover .card-icon img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 30px 40px 50px 40px;
+        }
+
+        .service-card h3 {
+            color: var(--accent);
+            font-size: 1.25rem;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .service-card ul { list-style: none; padding: 0; }
+
+        .service-card li {
+            font-size: 0.95rem;
+            color: var(--light-text);
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            font-weight: 300;
+        }
+
+        .service-card li::before {
+            content: "›";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* --- CONTACT --- */
+        .contact {
+            padding: 100px 8%;
+            background: linear-gradient(to bottom, var(--dark), #001a33);
+            text-align: center;
+        }
+
+        .contact-box {
+            display: inline-grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .contact-item {
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .contact-item:hover { border-color: var(--accent); transform: translateY(-5px); }
+        
+        .contact-item span { 
+            display: block; 
+            color: var(--accent); 
+            font-weight: 700; 
+            margin-bottom: 10px; 
+            font-size: 0.8rem; 
+            letter-spacing: 2px;
+            min-height: 1.2rem;
+        }
+
+        .contact-item p { font-size: 1.15rem; color: #fff; font-weight: 400; }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 60px 8%;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 960px) {
+            .service-grid { grid-template-columns: 1fr; }
+            nav { padding: 20px 5%; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.8rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <img src="logo.png" alt="IMAPar Logo">
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="#home">
+                    <span class="lang-en">HOME</span>
+                    <span class="lang-fr">ACCUEIL</span>
+                </a>
+                <a href="#services">
+                    <span class="lang-en">SERVICES</span>
+                    <span class="lang-fr">SERVICES</span>
+                </a>
+                <a href="#contact">
+                    <span class="lang-en">CONTACT</span>
+                    <span class="lang-fr">CONTACT</span>
+                </a>
+            </div>
+            <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">Français</button>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="lang-en">
+                <h1>Industrial Maintenance <br>& <span>Automation</span> Partner</h1>
+                <p>Providing specialized engineering solutions for production optimization, preventive maintenance, and hardware supply across Morocco.</p>
+            </div>
+            <div class="lang-fr">
+                <h1>Partenaire en Maintenance <br>Industrielle & <span>Automatisme</span></h1>
+                <p>Solutions d'ingénierie spécialisées pour l'optimisation de la production, la maintenance préventive et la fourniture d'équipements à travers le Maroc.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="section-title">
+            <div class="lang-en"><h2>Our Expertise</h2></div>
+            <div class="lang-fr"><h2>Notre Expertise</h2></div>
+            <div class="bar"></div>
+        </div>
+
+        <div class="service-grid">
+            <div class="service-card">
+                <div class="card-icon">
+                    <img src="maintenance.png" alt="Maintenance">
+                </div>
+                <div class="card-content">
+                    <h3>Maintenance</h3>
+                    <ul class="lang-en">
+                        <li>Equipment maintenance (Mechanical, Electrical, Pneumatic, Hydraulic)</li>
+                        <li>Preventive and Systematic Maintenance Plans (PMP)</li>
+                        <li>Corrective maintenance of industrial machinery</li>
+                        <li>Resident maintenance teams for production units</li>
+                        <li>Electronic board and variable speed drive repair</li>
+                        <li>Urgent troubleshooting for industrial installations</li>
+                    </ul>
+                    <ul class="lang-fr">
+                        <li>Maintenance des équipements (Mécanique, Électrique, Pneumatique, Hydraulique)</li>
+                        <li>Plans de Maintenance Préventive et Systématique (PMP)</li>
+                        <li>Maintenance corrective des machines industrielles</li>
+                        <li>Équipes de maintenance résidentes pour les unités de production</li>
+                        <li>Réparation de cartes électroniques et de variateurs de vitesse</li>
+                        <li>Dépannage urgent pour les installations industrielles</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="card-icon">
+                    <img src="automation.png" alt="Automation">
+                </div>
+                <div class="card-content">
+                    <div class="lang-en"><h3>Automation</h3></div>
+                    <div class="lang-fr"><h3>Automatisme</h3></div>
+                    <ul class="lang-en">
+                        <li>Design, installation, and commissioning of industrial solutions</li>
+                        <li>Optimization and improvement of automated systems</li>
+                        <li>Diagnostics, troubleshooting, and modifications</li>
+                        <li>Implementation of IIoT (Industrial IoT) solutions</li>
+                    </ul>
+                    <ul class="lang-fr">
+                        <li>Conception, installation et mise en service de solutions industrielles</li>
+                        <li>Optimisation et amélioration des systèmes automatisés</li>
+                        <li>Diagnostics, dépannage et modifications</li>
+                        <li>Mise en œuvre de solutions IIoT (IoT industriel)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="card-icon">
+                    <img src="Electricity & Energy.png" alt="Electricity & Energy">
+                </div>
+                <div class="card-content">
+                    <div class="lang-en"><h3>Electricity & Energy</h3></div>
+                    <div class="lang-fr"><h3>Électricité & Énergie</h3></div>
+                    <ul class="lang-en">
+                        <li>Studies and realization of HV/LV electrical installations</li>
+                        <li>Energy audits and consumption optimization</li>
+                        <li>Installation of industrial renewable energy systems</li>
+                    </ul>
+                    <ul class="lang-fr">
+                        <li>Études et réalisation d'installations électriques HT/BT</li>
+                        <li>Audits énergétiques et optimisation de la consommation</li>
+                        <li>Installation de systèmes industriels d'énergies renouvelables</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="card-icon">
+                    <img src="supply and installation.png" alt="Supply & Installation">
+                </div>
+                <div class="card-content">
+                    <div class="lang-en"><h3>Supply & Installation</h3></div>
+                    <div class="lang-fr"><h3>Fourniture & Installation</h3></div>
+                    <ul class="lang-en">
+                        <li>Import, export, and commercialization of industrial hardware</li>
+                        <li>Purchase and sale of specialized industrial equipment</li>
+                        <li>Full installation services for industrial systems</li>
+                    </ul>
+                    <ul class="lang-fr">
+                        <li>Import, export et commercialisation de matériel industriel</li>
+                        <li>Achat et vente d'équipements industriels spécialisés</li>
+                        <li>Services complets d'installation pour systèmes industriels</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="section-title">
+            <div class="lang-en"><h2 style="text-align: center;">Get In Touch</h2></div>
+            <div class="lang-fr"><h2 style="text-align: center;">Contactez-nous</h2></div>
+            <div class="bar" style="margin: 15px auto;"></div>
+        </div>
+        
+        <div class="contact-box">
+            <div class="contact-item">
+                <span class="lang-en">DIRECT LINE</span>
+                <span class="lang-fr">LIGNE DIRECTE</span>
+                <p>+212 619 998 474</p>
+            </div>
+            <div class="contact-item">
+                <span class="lang-en">OFFICIAL EMAIL</span>
+                <span class="lang-fr">E-MAIL OFFICIEL</span>
+                <p>y.barakat@imapar.ma</p>
+            </div>
+            <div class="contact-item">
+                <span class="lang-en">ADDRESS</span>
+                <span class="lang-fr">ADRESSE</span>
+                <p>12, Rue Saria Ben Zounaim 3ème étage Appt 3 palmier, Casablanca, Morocco</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="lang-en">© 2026 IMAPar | Engineering & Industrial Excellence</p>
+        <p class="lang-fr">© 2026 IMAPar | Ingénierie & Excellence Industrielle</p>
+    </footer>
+
+    <script>
+        let currentLang = 'en';
+        
+        function toggleLanguage() {
+            const enElements = document.querySelectorAll('.lang-en');
+            const frElements = document.querySelectorAll('.lang-fr');
+            const btn = document.getElementById('langToggle');
+            
+            if (currentLang === 'en') {
+                enElements.forEach(el => el.style.setProperty('display', 'none', 'important'));
+                frElements.forEach(el => {
+                    if (['DIV', 'H2', 'UL'].includes(el.tagName)) {
+                        el.style.setProperty('display', 'block', 'important');
+                    } else {
+                        el.style.setProperty('display', 'inline-block', 'important');
+                    }
+                });
+                btn.innerText = 'English';
+                currentLang = 'fr';
+            } else {
+                frElements.forEach(el => el.style.setProperty('display', 'none', 'important'));
+                enElements.forEach(el => {
+                    if (['DIV', 'H2', 'UL'].includes(el.tagName)) {
+                        el.style.setProperty('display', 'block', 'important');
+                    } else {
+                        el.style.setProperty('display', 'inline-block', 'important');
+                    }
+                });
+                btn.innerText = 'Français';
+                currentLang = 'en';
+            }
+        }
+    </script>
+
+</body>
+</html>
